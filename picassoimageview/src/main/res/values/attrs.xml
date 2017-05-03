@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PicassoImageView">
+        <attr name="imageResource" format="reference" />
+        <attr name="placeholderImageResource" format="reference" />
+        <attr name="errorImageResource" format="reference" />
+        <attr name="transformation">
+            <enum name="normal" value="0" />
+            <enum name="rounded" value="1" />
+            <enum name="oval" value="2" />
+            <enum name="blur" value="3" />
+        </attr>
+        <attr name="roundedCornerRadius" format="dimension" />
+        <attr name="borderWidth" format="dimension" />
+        <attr name="borderColor" format="color" />
+        <attr name="blurRadius" format="integer" />
+        <attr name="blurSampling" format="integer" />
+    </declare-styleable>
+
+
+</resources>
