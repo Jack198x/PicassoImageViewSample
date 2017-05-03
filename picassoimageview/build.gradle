@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 100
-        versionName "1.0.0"
+        versionCode 101
+        versionName "1.0.1"
 
     }
     buildTypes {
@@ -30,7 +30,7 @@ publish {
     userOrg = 'jackcn'
     groupId = 'cn.jack'
     artifactId = 'picassoimageview'
-    publishVersion = '1.0.0'
+    publishVersion = '1.0.1'
     desc = 'Picasso ImageView '
-    website = 'https://github.com/Jack198x/PermissionManager'
+    website = 'https://github.com/Jack198x/PicassoImageViewSample'
 }

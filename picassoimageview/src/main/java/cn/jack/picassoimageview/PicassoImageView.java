@@ -142,10 +142,10 @@ public class PicassoImageView extends ImageView {
                 }
                 if (transformationType == 3) {
                     //blur
-                    if (typedArray.hasValue(R.styleable.PicassoImageView_borderWidth)) {
+                    if (typedArray.hasValue(R.styleable.PicassoImageView_blurRadius)) {
                         blurRadius = typedArray.getInt(R.styleable.PicassoImageView_blurRadius, 1);
                     }
-                    if (typedArray.hasValue(R.styleable.PicassoImageView_borderColor)) {
+                    if (typedArray.hasValue(R.styleable.PicassoImageView_blurSampling)) {
                         blurSampling = typedArray.getInt(R.styleable.PicassoImageView_blurSampling, 1);
                     }
                     transformation = new BlurTransformation(getContext(), blurRadius, blurSampling);
