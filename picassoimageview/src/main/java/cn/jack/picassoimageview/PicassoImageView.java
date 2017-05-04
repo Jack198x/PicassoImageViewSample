@@ -220,7 +220,7 @@ public class PicassoImageView extends ImageView {
     private void into() {
         updateRequestCreator(requestCreator);
         if (heightPixel > 0 && widthPixel > 0) {
-            requestCreator.resize(widthPixel, heightPixel).into(this);
+            requestCreator.resize(widthPixel, heightPixel).onlyScaleDown().into(this);
         } else {
             requestCreator.into(this);
         }
