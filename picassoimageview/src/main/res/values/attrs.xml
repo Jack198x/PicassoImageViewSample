@@ -16,6 +16,7 @@
         <attr name="borderColor" format="color" />
         <attr name="blurRadius" format="integer" />
         <attr name="blurSampling" format="integer" />
+        <attr name="loadWithNoCache" format="boolean" />
     </declare-styleable>
 
 

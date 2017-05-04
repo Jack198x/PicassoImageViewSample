@@ -13,6 +13,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Transformation;
@@ -40,6 +41,7 @@ public class PicassoImageView extends ImageView {
     private int borderColor = Color.parseColor("#FFFFFF");
     private int blurRadius = 1;
     private int blurSampling = 1;
+    private boolean loadWithNoCache = false;
 
 
     public PicassoImageView(Context context) {
@@ -89,6 +91,9 @@ public class PicassoImageView extends ImageView {
                 }
                 if (typedArray.hasValue(R.styleable.PicassoImageView_errorImageResource)) {
                     errorResId = typedArray.getResourceId(R.styleable.PicassoImageView_errorImageResource, 0);
+                }
+                if (typedArray.hasValue(R.styleable.PicassoImageView_loadWithNoCache)) {
+                    loadWithNoCache = typedArray.getBoolean(R.styleable.PicassoImageView_loadWithNoCache, false);
                 }
 
                 if (typedArray.hasValue(R.styleable.PicassoImageView_transformation)) {
@@ -230,6 +235,9 @@ public class PicassoImageView extends ImageView {
     private void updateRequestCreator(RequestCreator creator) {
         if (creator == null) {
             return;
+        }
+        if (loadWithNoCache) {
+            requestCreator.memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE);
         }
         if (transformation != null) {
             creator.transform(transformation);
