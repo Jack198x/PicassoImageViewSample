@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -269,6 +270,7 @@ public class PicassoImageView extends ImageView {
         if (errorResId > 0) {
             creator.error(errorResId);
         }
+        creator.config(Bitmap.Config.RGB_565);
     }
 
 
