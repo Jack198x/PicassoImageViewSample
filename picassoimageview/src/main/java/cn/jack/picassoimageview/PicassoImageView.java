@@ -260,7 +260,6 @@ public class PicassoImageView extends ImageView {
             return;
         }
         if (loadWithNoCache) {
-            //memoryPolicy的NO_CACHE是指图片加载时放弃在内存缓存中查找，NO_STORE是指图片加载完不缓存在内存中。
             creator.memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE);
         }
         if (transformation != null) {

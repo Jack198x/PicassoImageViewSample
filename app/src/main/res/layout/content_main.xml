@@ -9,12 +9,6 @@
     tools:showIn="@layout/activity_main">
 
 
-    <cn.jack.picassoimageview.PicassoImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:background="@color/colorAccent"
-        app:imageResource="@drawable/t"/>
 
 
 
