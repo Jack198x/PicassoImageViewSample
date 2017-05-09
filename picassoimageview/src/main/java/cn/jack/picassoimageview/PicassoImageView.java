@@ -95,14 +95,6 @@ public class PicassoImageView extends ImageView {
     }
 
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        Picasso.with(getContext()).cancelRequest(this);
-        setImageBitmap(null);
-        setImageDrawable(null);
-    }
-
     private void init(Context context, @Nullable AttributeSet attrs) {
         if (attrs != null) {
             final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PicassoImageView);
