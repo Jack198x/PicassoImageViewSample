@@ -12,6 +12,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.squareup.picasso.MemoryPolicy;
@@ -81,7 +82,10 @@ public class PicassoImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        Log.e("onSizeChanged", "onSizeChanged");
         if (getMeasuredHeight() > 0 && getMeasuredWidth() > 0) {
+            Log.e("getMeasuredHeight", getMeasuredHeight() + "");
+            Log.e("getMeasuredWidth", getMeasuredWidth() + "");
             heightPixel = getMeasuredHeight();
             widthPixel = getMeasuredWidth();
             if (requestCreator != null) {
@@ -176,8 +180,6 @@ public class PicassoImageView extends ImageView {
                     }
                     transformation = new BlurTransformation(getContext(), blurRadius, blurSampling);
                 }
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
