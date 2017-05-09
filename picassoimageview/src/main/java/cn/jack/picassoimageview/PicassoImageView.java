@@ -66,9 +66,21 @@ public class PicassoImageView extends ImageView {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (changed && getMeasuredHeight() > 0 && getMeasuredWidth() > 0) {
+
+    }
+
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (getMeasuredHeight() > 0 && getMeasuredWidth() > 0) {
             heightPixel = getMeasuredHeight();
             widthPixel = getMeasuredWidth();
             if (requestCreator != null) {
@@ -77,6 +89,14 @@ public class PicassoImageView extends ImageView {
         }
     }
 
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Picasso.with(getContext()).cancelRequest(this);
+        setImageBitmap(null);
+        setImageDrawable(null);
+    }
 
     private void init(Context context, @Nullable AttributeSet attrs) {
         if (attrs != null) {
@@ -237,7 +257,8 @@ public class PicassoImageView extends ImageView {
             return;
         }
         if (loadWithNoCache) {
-            requestCreator.memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE);
+            //memoryPolicy的NO_CACHE是指图片加载时放弃在内存缓存中查找，NO_STORE是指图片加载完不缓存在内存中。
+            creator.memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE);
         }
         if (transformation != null) {
             creator.transform(transformation);
