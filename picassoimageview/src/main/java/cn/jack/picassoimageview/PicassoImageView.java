@@ -12,7 +12,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.squareup.picasso.MemoryPolicy;
@@ -44,6 +43,7 @@ public class PicassoImageView extends ImageView {
     private int blurRadius = 1;
     private int blurSampling = 1;
     private boolean loadWithNoCache = false;
+    private boolean noFade = false;
 
 
     public PicassoImageView(Context context) {
@@ -82,10 +82,7 @@ public class PicassoImageView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        Log.e("onSizeChanged", "onSizeChanged");
         if (getMeasuredHeight() > 0 && getMeasuredWidth() > 0) {
-            Log.e("getMeasuredHeight", getMeasuredHeight() + "");
-            Log.e("getMeasuredWidth", getMeasuredWidth() + "");
             heightPixel = getMeasuredHeight();
             widthPixel = getMeasuredWidth();
             if (requestCreator != null) {
@@ -112,7 +109,9 @@ public class PicassoImageView extends ImageView {
                 if (typedArray.hasValue(R.styleable.PicassoImageView_loadWithNoCache)) {
                     loadWithNoCache = typedArray.getBoolean(R.styleable.PicassoImageView_loadWithNoCache, false);
                 }
-
+                if (typedArray.hasValue(R.styleable.PicassoImageView_noFade)) {
+                    noFade = typedArray.getBoolean(R.styleable.PicassoImageView_noFade, false);
+                }
                 if (typedArray.hasValue(R.styleable.PicassoImageView_transformation)) {
                     transformationType = typedArray.getInt(R.styleable.PicassoImageView_transformation, 0);
                 }
@@ -253,6 +252,9 @@ public class PicassoImageView extends ImageView {
         }
         if (loadWithNoCache) {
             creator.memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE);
+        }
+        if (noFade) {
+            creator.noFade();
         }
         if (transformation != null) {
             creator.transform(transformation);
