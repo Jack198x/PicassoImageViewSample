@@ -10,6 +10,10 @@
 
 
 
+    <cn.jack.picassoimageview.PicassoImageView
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        app:imageResource="@mipmap/ic_launcher"/>
 
 
 

@@ -12,6 +12,9 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.squareup.picasso.MemoryPolicy;
@@ -30,6 +33,8 @@ import cn.jack.picassoimageview.transformation.RoundedTransformationBuilder;
 
 @SuppressLint("AppCompatCustomView")
 public class PicassoImageView extends ImageView {
+    private static final int PENDING_SIZE = 0;
+    int SIZE_ORIGINAL = Integer.MIN_VALUE;
     private RequestCreator requestCreator;
     private int widthPixel = 0;
     private int heightPixel = 0;
@@ -65,30 +70,6 @@ public class PicassoImageView extends ImageView {
     public PicassoImageView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-
-    }
-
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        if (getMeasuredHeight() > 0 && getMeasuredWidth() > 0) {
-            heightPixel = getMeasuredHeight();
-            widthPixel = getMeasuredWidth();
-            if (requestCreator != null) {
-                into();
-            }
-        }
     }
 
 
@@ -177,7 +158,83 @@ public class PicassoImageView extends ImageView {
                 typedArray.recycle();
             }
         }
+        getViewTreeObserver().addOnPreDrawListener(onPreDrawListener);
     }
+
+    private ViewTreeObserver.OnPreDrawListener onPreDrawListener = new ViewTreeObserver.OnPreDrawListener() {
+        @Override
+        public boolean onPreDraw() {
+            widthPixel = getTargetWidth();
+            heightPixel = getTargetHeight();
+            if (isViewStateAndSizeValid(widthPixel, heightPixel)) {
+                Log.e("getMeasuredHeight", heightPixel + "");
+                Log.e("getMeasuredWidth", widthPixel + "");
+                if (requestCreator != null) {
+                    into();
+                }
+                getViewTreeObserver().removeOnPreDrawListener(onPreDrawListener);
+            }
+            return true;
+        }
+    };
+
+
+    private boolean isViewStateAndSizeValid(int width, int height) {
+        return isViewStateValid() && isSizeValid(width) && isSizeValid(height);
+    }
+
+    private boolean isViewStateValid() {
+        // We consider the view state as valid if the view has
+        // non-null layout params and a non-zero layout width and height.
+        if (getLayoutParams() != null
+                && getLayoutParams().width > 0
+                && getLayoutParams().height > 0) {
+            return true;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return isLaidOut();
+        }
+        return !isLayoutRequested();
+    }
+
+    private boolean isSizeValid(int size) {
+        return size > 0 || size == SIZE_ORIGINAL;
+    }
+
+    private int getTargetHeight() {
+        int verticalPadding = getPaddingTop() + getPaddingBottom();
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        int layoutParamSize = layoutParams != null ? layoutParams.height : PENDING_SIZE;
+        return getTargetDimen(getHeight(), layoutParamSize, verticalPadding);
+    }
+
+    private int getTargetWidth() {
+        int horizontalPadding = getPaddingLeft() + getPaddingRight();
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+        int layoutParamSize = layoutParams != null ? layoutParams.width : PENDING_SIZE;
+        return getTargetDimen(getWidth(), layoutParamSize, horizontalPadding);
+    }
+
+    private int getTargetDimen(int viewSize, int paramSize, int paddingSize) {
+        int adjustedViewSize = viewSize - paddingSize;
+        if (isSizeValid(adjustedViewSize)) {
+            return adjustedViewSize;
+        }
+
+        if (paramSize == PENDING_SIZE) {
+            return PENDING_SIZE;
+        }
+
+        if (paramSize == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            return SIZE_ORIGINAL;
+        } else if (paramSize > 0) {
+            return paramSize - paddingSize;
+        } else {
+            return PENDING_SIZE;
+        }
+    }
+
 
     public Transformation getTransformation() {
         return transformation;
